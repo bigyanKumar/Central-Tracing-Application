@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import com.restaurant.demo.common.KafkMessagePublisher;
 import com.restaurant.demo.dao.*;
 import com.restaurant.demo.globalexceptionhandler.GenericException;
 import com.restaurant.demo.model.*;
+import brave.Tracer;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +35,9 @@ public class RestaurantService {
 	
 	@Autowired
 	private KafkMessagePublisher kafkMessagePublisher;
+	
+	@Autowired
+	private Tracer tracer;
 	
 	public Restaurant saveRestaurant(Restaurant restaurant) throws GenericException{
 		log.info("Entered into saveRestaurant#RestaurantService");
@@ -97,7 +102,15 @@ public class RestaurantService {
 	public void placeOrder(OrderRequest order) throws Exception {
 		log.info("Entered into placeOrder#RestaurantService");
 		log.info("OrderRequest body placeOrder#RestaurantService ::{}",order);
-		processOrder(order);
+		try {
+	        processOrder(order);
+	    } catch (Exception ex) {
+	        tracer.currentSpan().tag("error", "true");
+	        tracer.currentSpan().tag("error.message", ex.getMessage());
+	        tracer.currentSpan().error(ex);
+	        log.info("Exception came in placeHolder#Restaurant-Service  :: {} ", ExceptionUtils.getStackTrace(ex));
+	        throw ex;
+	    }
 	}
 	
 	public void processOrder(OrderRequest order) throws InterruptedException {
