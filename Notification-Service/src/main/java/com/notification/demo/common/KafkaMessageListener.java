@@ -20,7 +20,6 @@ public class KafkaMessageListener {
 	
 	@KafkaListener(topics = "notification",groupId = "notifications")
 	public void consumeMsg(UserNotificationDto message) {
-		
 		log.info("Nessage are getting from the kafak KafkaMessageListener#NotificationService:: {}",message.toString());
 		
 	}

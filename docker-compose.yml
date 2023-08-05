@@ -15,7 +15,7 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT : zookeeper:2181
   zipkin:
-    image: openzipkin/zipkin
+    image: zipkin:latest
     container_name: zipkin
     ports:
       - "9411:9411"

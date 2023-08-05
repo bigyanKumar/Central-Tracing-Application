@@ -1,6 +1,5 @@
 package com.restaurant.demo.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -116,8 +115,6 @@ public class RestaurantService {
 	public void processOrder(OrderRequest order) throws InterruptedException {
 		TimeUnit.MINUTES.sleep(order.getWait());
 		order.setStatus(OrderStatus.PROCESSED);
-		String a = null;
-		a.length();
 		orderDao.save(order);
 		kafkMessagePublisher.sendMessageForTheDashBoardService(
 		new DashboardNotificationDto(order.getOrderDetails().getOrderDetailsId(),order.getStatus().name()));
@@ -125,6 +122,7 @@ public class RestaurantService {
 		new UserNotificationDto(
 				order.getOrderDetails().getUserId(),order.getOrderDetails().getFoodId(),
 				order.getOrderDetails().getUserName(),order.getOrderDetails().getUserEmail(),order.getOrderDetails().getUserMobile()));
+		log.info("All messages has been pushed to the kafka.");
 	}
 	
 	
