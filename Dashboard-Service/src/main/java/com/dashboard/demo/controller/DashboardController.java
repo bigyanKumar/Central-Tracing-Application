@@ -70,4 +70,9 @@ public class DashboardController {
 		log.info("Entered into dashboard order#DashboardController");
 		return new ResponseEntity<>(dashboardService.processOrder(orderDetails),HttpStatus.OK);
 	}
+	@GetMapping("order-details")
+	public ResponseEntity<?> getAllOrderDetails(){
+		log.info("Entered into dashboard order#DashboardController");
+		return new ResponseEntity<>(dashboardService.getAllOrderDetails(),HttpStatus.OK);
+	}
 }

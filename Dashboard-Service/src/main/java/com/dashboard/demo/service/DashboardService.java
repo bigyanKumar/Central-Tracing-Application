@@ -2,6 +2,7 @@ package com.dashboard.demo.service;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,7 +66,7 @@ public class DashboardService {
 			orderDto.setId(orderDetails.getOrderId());
 			log.info("Order Response :: {},OrderDto body :: {} ",res.getBody(),orderDto.toString());
 			if(!res.getBody().getStatus().name().equals(Status.PROCESSED.name()))
-				orderDto.setDescription("Please wait for "+res.getBody().getWait()+ " Min(s), We are processing your. Will notify sortly...");
+				orderDto.setDescription("Please wait for "+res.getBody().getWait()+ " Min(s), We are processing your order. Will notify sortly...");
 			else
 			orderDto.setDescription("Hurrah! Your order has been processed");
 		}catch(Exception ex){
@@ -77,7 +78,7 @@ public class DashboardService {
 		
 	}
 	public RequestOrderDetail detailsMapping(OrderDetails orderDetails) {
-		log.info("Enter into  detailsMapping#Dashboard-Service");
+		log.info("Entered into  detailsMapping#Dashboard-Service");
 		RequestOrderDetail details=new RequestOrderDetail();
 		details.setFoodId(orderDetails.getFoodDetails().getFoodId());
 		details.setUserId(orderDetails.getUserDetails().getUserId());
@@ -89,7 +90,7 @@ public class DashboardService {
 	}
 	
 	public OrderDetails dataMapping(OrderDetails order,User user, Food food) {
-		log.info("Enter into  dataMapping#Dashboard-Service");
+		log.info("Entered into  dataMapping#Dashboard-Service");
 		order.setOrderedAt(LocalDateTime.now());
 		order.setStatus(Status.PROCESSING);
 		order.getFoodDetails().setFoodName(food.getName());
@@ -101,7 +102,7 @@ public class DashboardService {
 		return order;
 	}
 	public Food getFood(int foodId) {
-		log.info("Enter into  getFood#Dashboard-Service :: {} ",foodId);
+		log.info("Entered into  getFood#Dashboard-Service :: {} ",foodId);
 		Food food= restTemplate.getForObject(restaurantUrl+"/restaurants/foods/"+foodId,Food.class);
 		log.info("food Response :: {} ",food);
 		if(food==null) {
@@ -112,7 +113,7 @@ public class DashboardService {
 	}
 	
 	public void validatePayment(int userId,Double amount) {
-		log.info("Enter into validatePayment#Dashboard-Service :: {}",userId,amount);
+		log.info("Entered into validatePayment#Dashboard-Service :: {}",userId,amount);
 		
 		Boolean valid = restTemplate.getForObject(paymentUrl+"/payments/validate/"+userId+"/"+amount, Boolean.class);
 		log.info("Payment Response :: {} ",valid);
@@ -124,7 +125,7 @@ public class DashboardService {
 	}
 	
 	public User getUser(int userId) {
-		log.info("Enter into getUser#Dashboard-Service :: {}",userId);
+		log.info("Entered into getUser#Dashboard-Service :: {}",userId);
 		User user= restTemplate.getForObject(userUrl+"/users/"+userId,User.class);
 		log.info("User Response :: {} ",user);
 		if(user==null) {
@@ -132,6 +133,11 @@ public class DashboardService {
 			throw new GenericException("Please provice valid user id, User not foud with this id "+userId);
 		}
 		return user;
+	}
+	
+	public List<OrderDetails> getAllOrderDetails(){
+		log.info("Entered into getAllOrderDetails#DashboardService");
+		return orderDetailsDao.findAll();
 	}
 	
 	
