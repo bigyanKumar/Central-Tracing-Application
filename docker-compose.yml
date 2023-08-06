@@ -7,7 +7,7 @@ services:
   zookeeper:
     image: wurstmeister/zookeeper
     volumes:
-      - Bigyan:/app/data/
+      - Bigyan:/app/zookeeper/
     restart: always
     container_name: zookeeper
     ports:
@@ -17,7 +17,7 @@ services:
   kafka:
     image: wurstmeister/kafka
     volumes:
-      - Bigyan:/app/data/
+      - Bigyan:/app/kafka/
     restart: always
     container_name: kafka
     ports:
@@ -30,7 +30,7 @@ services:
   zipkin:
     image: zipkin:latest
     volumes:
-      - Bigyan:/app/data/
+      - Bigyan:/app/log/
     restart: always
     container_name: zipkin
     ports:
