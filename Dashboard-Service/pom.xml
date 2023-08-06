@@ -70,13 +70,8 @@
     <artifactId>spring-cloud-starter-sleuth</artifactId>
 	</dependency>
 	<dependency>
-	<groupId>com.user_service</groupId>
-	<artifactId>User-Service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	</dependency>
-	<dependency>
-	<groupId>com.restaurant </groupId>
-	<artifactId>Restaurant-Service</artifactId>
+		<groupId>com.common</groupId>
+	<artifactId>common</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	</dependency>
 	</dependencies>

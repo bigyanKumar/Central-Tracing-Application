@@ -11,11 +11,11 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.common.dto.DashboardNotificationDto;
 import com.dashboard.demo.dao.OrderDetailsDao;
 import com.dashboard.demo.globalexceptionhandler.GenericException;
 import com.dashboard.demo.model.OrderDetails;
 import com.dashboard.demo.model.Status;
-import com.restaurant.demo.model.DashboardNotificationDto;
 import brave.Tracer;
 import lombok.extern.slf4j.Slf4j;
 

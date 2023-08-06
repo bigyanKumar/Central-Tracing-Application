@@ -15,14 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.dashboard.demo.dao.OrderDetailsDao;
 import com.dashboard.demo.globalexceptionhandler.GenericException;
-import com.dashboard.demo.model.OrderDetails;
-import com.dashboard.demo.model.OrderDto;
-import com.dashboard.demo.model.Status;
-import com.restaurant.demo.model.Food;
-import com.restaurant.demo.model.OrderRequest;
-import com.restaurant.demo.model.OrderStatus;
-import com.restaurant.demo.model.RequestOrderDetail;
-import com.user.demo.model.User;
+import com.dashboard.demo.model.*;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -71,7 +64,7 @@ public class DashboardService {
 			orderDto.setStatus(res.getBody().getStatus().name());
 			orderDto.setId(orderDetails.getOrderId());
 			log.info("Order Response :: {},OrderDto body :: {} ",res.getBody(),orderDto.toString());
-			if(!res.getBody().getStatus().name().equals(OrderStatus.PROCESSED.name()))
+			if(!res.getBody().getStatus().name().equals(Status.PROCESSED.name()))
 				orderDto.setDescription("Please wait for "+res.getBody().getWait()+ " Min(s), We are processing your. Will notify sortly...");
 			else
 			orderDto.setDescription("Hurrah! Your order has been processed");

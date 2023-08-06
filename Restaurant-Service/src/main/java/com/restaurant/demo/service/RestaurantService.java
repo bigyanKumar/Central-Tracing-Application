@@ -11,10 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.common.dto.*;
+import com.common.dto.DashboardNotificationDto;
+import com.common.dto.UserNotificationDto;
 import com.restaurant.demo.common.KafkMessagePublisher;
 import com.restaurant.demo.dao.*;
 import com.restaurant.demo.globalexceptionhandler.GenericException;
 import com.restaurant.demo.model.*;
+
 import brave.Tracer;
 
 import lombok.extern.slf4j.Slf4j;
@@ -113,9 +117,9 @@ public class RestaurantService {
 	}
 	
 	public void processOrder(OrderRequest order) throws InterruptedException {
-		TimeUnit.MINUTES.sleep(order.getWait());
 		order.setStatus(OrderStatus.PROCESSED);
 		orderDao.save(order);
+		TimeUnit.MILLISECONDS.sleep(200);
 		kafkMessagePublisher.sendMessageForTheDashBoardService(
 		new DashboardNotificationDto(order.getOrderDetails().getOrderDetailsId(),order.getStatus().name()));
 		kafkMessagePublisher.sendNotificationForTheUser(

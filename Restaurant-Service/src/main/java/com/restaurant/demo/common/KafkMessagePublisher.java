@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import com.restaurant.demo.model.DashboardNotificationDto;
-import com.restaurant.demo.model.UserNotificationDto;
+import com.common.dto.*;
 
 import lombok.extern.slf4j.Slf4j;
 

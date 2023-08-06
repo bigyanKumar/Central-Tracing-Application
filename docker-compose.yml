@@ -1,21 +1,41 @@
 version: '3.1'
 
+networks:
+  mynetwork:
+    driver: bridge
 services:
   zookeeper:
     image: wurstmeister/zookeeper
+    volumes:
+      - Bigyan:/app/data/
+    restart: always
     container_name: zookeeper
     ports:
       - "2181:2181"
+    networks:
+      - mynetwork 
   kafka:
     image: wurstmeister/kafka
+    volumes:
+      - Bigyan:/app/data/
+    restart: always
     container_name: kafka
     ports:
       - "9092:9092"
+    networks:
+      - mynetwork 
     environment: 
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT : zookeeper:2181
   zipkin:
     image: zipkin:latest
+    volumes:
+      - Bigyan:/app/data/
+    restart: always
     container_name: zipkin
     ports:
       - "9411:9411"
+    networks:
+      - mynetwork 
+volumes:
+  Bigyan: {}

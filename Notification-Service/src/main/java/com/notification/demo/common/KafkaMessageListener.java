@@ -3,7 +3,7 @@ package com.notification.demo.common;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import com.restaurant.demo.model.UserNotificationDto;
+import com.common.dto.UserNotificationDto;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -14,8 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.dashboard.demo.globalexceptionhandler.GenericException;
 import com.dashboard.demo.model.OrderDetails;
+import com.dashboard.demo.model.User;
 import com.dashboard.demo.service.DashboardService;
-import com.user.demo.model.User;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,7 +58,6 @@ public class DashboardController {
 		log.info("Entered into dashboard getUser#DashboardController");
 		
 		User user= restTemplate.getForObject(userUrl+"/users/"+userId,User.class);
-		
 		if(user == null) {
 			throw new GenericException("User Not Found with this id :: {} "+userId);
 		}
