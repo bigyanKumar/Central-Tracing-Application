@@ -7,35 +7,89 @@ services:
   zookeeper:
     image: wurstmeister/zookeeper
     volumes:
-      - Bigyan:/app/zookeeper/
+      - ./app/zookeeper:/app/zookeeper/
     restart: always
     container_name: zookeeper
     ports:
       - "2181:2181"
     networks:
-      - mynetwork 
+      - mynetwork
   kafka:
     image: wurstmeister/kafka
     volumes:
-      - Bigyan:/app/kafka/
+      - ./app/kafka:/app/kafka/
     restart: always
-    container_name: kafka
+    container_name: kafka_service
     ports:
-      - "9092:9092"
+      - "19092:9092"
     networks:
       - mynetwork 
     environment: 
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_ZOOKEEPER_CONNECT : zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:19092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    depends_on:
+      - zookeeper
   zipkin:
     image: zipkin:latest
     volumes:
-      - Bigyan:/app/log/
+      - ./app:/app/zipkin/
     restart: always
     container_name: zipkin
     ports:
       - "9411:9411"
     networks:
-      - mynetwork 
-volumes:
-  Bigyan: {}
+      - mynetwork
+  restaurat-service:
+    image: restaurant_service:latest
+    container_name: restaurant_service
+    ports:
+      - "8083:8083"
+    restart: always
+    volumes:
+      - ./app:/App/Data/
+    environment:
+      RDS_HOSTNAME: mysqldb
+      RDS_PORT: 3306
+      RDS_DB_NAME: foodorderservice
+      RDS_USERNAME: root
+      RDS_PASSWORD: root
+      ZIPKIN_HOST: zipkin
+      KAFKA_SERVICE_HOST: kafka
+    networks:
+      - mynetwork
+    depends_on:
+      - kafka
+  user-service:
+    image: user_service:latest
+    container_name: user_service
+    ports:
+      - "8084:8084"
+    restart: always
+    volumes:
+      - ./app:/App/Data/
+    environment:
+      RDS_HOSTNAME: mysqldb
+      RDS_PORT: 3306
+      RDS_DB_NAME: foodorderservice
+      RDS_USERNAME: root
+      RDS_PASSWORD: root
+      ZIPKIN_HOST: zipkin
+    networks:
+      - mynetwork
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0.33
+    container_name: mysqldb
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: foodorderservice
+    volumes:
+      - ./sql:/var/lib/mysql
+    networks:
+      - mynetwork  
