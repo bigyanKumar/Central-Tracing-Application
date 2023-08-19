@@ -6,3 +6,9 @@
 *.docx
 /sql/
 /app/
+Payment-Service/.DS_Store
+Payment-Service/.DS_Store
+Restaurant-Service/.DS_Store
+*.log
+track.log
+Notification-Service/.DS_Store
